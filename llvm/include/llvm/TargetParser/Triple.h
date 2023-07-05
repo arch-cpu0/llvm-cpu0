@@ -45,7 +45,8 @@ class Triple {
 public:
   enum ArchType {
     UnknownArch,
-
+    cpu0,
+    cpu0el,
     arm,            // ARM (little endian): arm, armv.*, xscale
     armeb,          // ARM (big endian): armeb
     aarch64,        // AArch64 (little endian): aarch64

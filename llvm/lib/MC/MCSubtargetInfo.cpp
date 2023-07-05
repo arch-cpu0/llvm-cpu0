@@ -210,6 +210,11 @@ void MCSubtargetInfo::InitMCProcessorInfo(StringRef CPU, StringRef TuneCPU,
                                           StringRef FS) {
   FeatureBits = getFeatures(CPU, TuneCPU, FS, ProcDesc, ProcFeatures);
   FeatureString = std::string(FS);
+  #if 1 // Disable reconginized processor message. For Cpu0
+    if (TargetTriple.getArch() == llvm::Triple::cpu0 ||
+    TargetTriple.getArch() == llvm::Triple::cpu0el)
+    Cpu0DisableUnreconginizedMessage = true;
+  #endif
 
   if (!TuneCPU.empty())
     CPUSchedModel = &getSchedModelForCPU(TuneCPU);
@@ -313,7 +318,10 @@ const MCSchedModel &MCSubtargetInfo::getSchedModelForCPU(StringRef CPU) const {
 
   // Find entry
   const SubtargetSubTypeKV *CPUEntry = Find(CPU, ProcDesc);
-
+  #if 1 // Disable reconginized processor message. For Cpu0
+    if (TargetTriple.getArch() != llvm::Triple::cpu0 &&
+    TargetTriple.getArch() != llvm::Triple::cpu0el)
+  #endif
   if (!CPUEntry) {
     if (CPU != "help") // Don't error if the user asked for help.
       errs() << "'" << CPU
